@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'admin_mobile',
     'hos_mobile',
+    'knox',
     'patient_mobile',
     'rest_framework',
 ]
@@ -53,7 +54,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     
 ]
-
+from datetime import timedelta
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication',),
     #         'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -64,11 +65,15 @@ REST_FRAMEWORK = {
      ]
 }
 
-REST_KNOX = {
-    'USER_SERIALIZER': 'hos_login.serializers.UserSerializer',
-    'TOKEN_TTL': timedelta(hours=48)
+APP_AUTHENTICATION_CLASSES = {
+    'admin': 'admin_app.auth.AdminTokenAuthentication',
+    'hospital': 'hospital_app.auth.HospitalTokenAuthentication',
+    'patient': 'patient_app.auth.PatientTokenAuthentication',
 }
+
 ROOT_URLCONF = 'mobile.urls'
+
+
 
 TEMPLATES = [
     {
@@ -97,7 +102,7 @@ DATABASES = {
 		'ENGINE': 'django.db.backends.mysql',
 		'NAME': 'HDIMS',
 		'USER': 'root',
-		'PASSWORD': 'Kamal1395',
+		'PASSWORD': 'ccai',
 		'HOST':'localhost',
 		'PORT':'3306',
 	}

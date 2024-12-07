@@ -11,9 +11,12 @@ from .serializers import (
     ReportSerializer, CommunicationSerializer, ProgramPerformanceSerializer,
     AuditLogSerializer, IncidentReportSerializer
 )
+from admin_mobile.auth import AdminTokenAuthentication
+from rest_framework.permissions import IsAuthenticated, AllowAny
 
 
 class AdminSignupAPIView(APIView):
+    permission_classes= [AllowAny]
     """Handles admin signup."""
     def post(self, request):
         serializer = AdminCreateUserSerializer(data=request.data)
@@ -27,6 +30,9 @@ class AdminSignupAPIView(APIView):
 
 
 class AdminLoginAPIView(APIView):
+   
+    authentication_classes = [AdminTokenAuthentication] 
+    permission_classes= [AllowAny]
     """Handles admin login."""
     def post(self, request):
         serializer = AdminLoginSerializer(data=request.data)
@@ -49,6 +55,9 @@ class AdminLoginAPIView(APIView):
 
 
 class DataSubmitChoiceSerializer(serializers.Serializer):
+    authentication_classes = [AdminTokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
     data_type = serializers.ChoiceField(choices=[
         ('hospital', 'Hospital'),
         ('doctor', 'Doctor'),
@@ -62,6 +71,9 @@ class DataSubmitChoiceSerializer(serializers.Serializer):
     ])
 
 class SubmitDataView(views.APIView):
+    authentication_classes = [AdminTokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
     def post(self, request, *args, **kwargs):
         # First, let the user choose the data type
         data_type_serializer = DataSubmitChoiceSerializer(data=request.data)
@@ -96,6 +108,9 @@ class SubmitDataView(views.APIView):
 
 
 class DisplayAllinfoView(APIView):
+    authentication_classes = [AdminTokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
     def get(self, request, *args, **kwargs):
         try:
             # Retrieve data for all hospitals and their related models
