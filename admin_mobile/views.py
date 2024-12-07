@@ -11,14 +11,16 @@ from .serializers import (
     ReportSerializer, CommunicationSerializer, ProgramPerformanceSerializer,
     AuditLogSerializer, IncidentReportSerializer
 )
-
+from rest_framework.permissions import AllowAny
 
 class AdminSignupAPIView(APIView):
     """Handles admin signup."""
+    permission_classes = [AllowAny]  # Allow anyone to access the signup endpoint
+
     def post(self, request):
         serializer = AdminCreateUserSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            serializer.save()  # Saves the new user to the database
             return Response(
                 {"message": "Admin registered successfully."}, 
                 status=status.HTTP_201_CREATED
@@ -28,11 +30,13 @@ class AdminSignupAPIView(APIView):
 
 class AdminLoginAPIView(APIView):
     """Handles admin login."""
+    permission_classes = [AllowAny]  # Allow anyone to access the login endpoint
+
     def post(self, request):
         serializer = AdminLoginSerializer(data=request.data)
         if serializer.is_valid():
-            user = serializer.validated_data
-            refresh = RefreshToken.for_user(user)
+            user = serializer.validated_data  # Validates the credentials and retrieves the user
+            refresh = RefreshToken.for_user(user)  # Generates refresh and access tokens for the user
             return Response({
                 "message": f"Welcome back, Admin {user.username}!",
                 "refresh": str(refresh),
