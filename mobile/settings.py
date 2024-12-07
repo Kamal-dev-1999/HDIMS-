@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
-
+from datetime import timedelta
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'knox',
     'patient_mobile',
     'rest_framework',
+    'rest_framework.authtoken',
+    'knox',
 ]
 
 MIDDLEWARE = [
@@ -56,19 +58,26 @@ MIDDLEWARE = [
 ]
 from datetime import timedelta
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication',),
-    #         'rest_framework_simplejwt.authentication.JWTAuthentication',
-     'DEFAULT_PERMISSION_CLASSES': [
-         'rest_framework.permissions.IsAuthenticated',
-            'rest_framework.permissions.AllowAny',
-
-     ]
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'knox.auth.TokenAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
 }
 
+<<<<<<< HEAD
 APP_AUTHENTICATION_CLASSES = {
     'admin': 'admin_app.auth.AdminTokenAuthentication',
     'hospital': 'hospital_app.auth.HospitalTokenAuthentication',
     'patient': 'patient_app.auth.PatientTokenAuthentication',
+=======
+
+
+REST_KNOX = {
+    'USER_SERIALIZER': 'hos_login.serializers.UserSerializer',
+    'TOKEN_TTL': timedelta(hours=48)
+>>>>>>> 3f92cb7e92a51ca6e69e0af38179988ff77b610b
 }
 
 ROOT_URLCONF = 'mobile.urls'
